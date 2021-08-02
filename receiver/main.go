@@ -17,8 +17,8 @@ func main() {
 	defer ch.Close()
 
 	err = ch.ExchangeDeclare(
-		"logs-direct",
-		"direct",
+		"logs-topic",
+		"topic",
 		true, //durable
 		false,
 		false,
@@ -38,15 +38,15 @@ func main() {
 	failOnError(err, "Failed to declare a queue")
 
 	if len(os.Args) < 2 {
-		log.Printf("Usage: %s [info] [warning] [error]", os.Args[0])
+		log.Printf("Usage: %s [binding_key]", os.Args[0])
 		os.Exit(0)
 	}
 
 	for _, s := range os.Args[1:] {
 		err = ch.QueueBind(
-			q.Name,        // queue name
-			s,             // routing key
-			"logs-direct", // exchange
+			q.Name,       // queue name
+			s,            // routing key
+			"logs-topic", // exchange
 			false,
 			nil,
 		)

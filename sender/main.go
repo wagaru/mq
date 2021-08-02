@@ -18,8 +18,8 @@ func main() {
 	defer ch.Close()
 
 	err = ch.ExchangeDeclare(
-		"logs-direct",
-		"direct",
+		"logs-topic",
+		"topic",
 		true, //durable
 		false,
 		false,
@@ -30,7 +30,7 @@ func main() {
 
 	body := bodyFrom(os.Args)
 	err = ch.Publish(
-		"logs-direct",         //exchange
+		"logs-topic",          //exchange
 		severityFrom(os.Args), // routing key
 		false,
 		false,
@@ -62,7 +62,7 @@ func bodyFrom(args []string) string {
 func severityFrom(args []string) string {
 	var s string
 	if len(args) < 2 || args[1] == "" {
-		s = "info"
+		s = "anonymous.info"
 	} else {
 		s = args[1]
 	}
